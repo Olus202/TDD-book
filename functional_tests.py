@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 import unittest
 
 class NewVisitorTest(unittest.TestCase):
@@ -18,17 +19,32 @@ class NewVisitorTest(unittest.TestCase):
 
         # "Lists" in title?
         self.assertIn('Lists', self.browser.title)
-        self.fail('End of test!')
+        header_text = self.browser.find_element_by_tag_name('h1').text
+        self.assertIn('Lists', header_text)
 
         # Typing the list of things to do.
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertEqual(
+            inputbox.get_attribute('placeholder'),
+            'Type thing to do.'
+        )
 
         # Typing "Buy the peacock feathers" in the text box.
+        inputbox.send_keys('Buy the peacock feathers')
 
         # After pressing ENTER, the page has been updated.
         # "1. Buy the peacock feathers" as the element of the list.
+        inputbox.send_keys(Keys.ENTER)
+
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertTrue(
+            any(row.text == '1. Buy the peacock feathers' for row in rows)
+        )
 
         # It's still the text box on the page.
         # Typing "Use the peacock feathers to make a bait" as a second element.
+        self.fail('End of test!')
 
         # The page has been updated again, now it's two elements on the list.
 
