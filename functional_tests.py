@@ -20,13 +20,13 @@ class NewVisitorTest(unittest.TestCase):
         # "Lists" in title?
         self.assertIn('Lists', self.browser.title)
         header_text = self.browser.find_element_by_tag_name('h1').text
-        self.assertIn('Lists', header_text)
+        self.assertIn('list', header_text)
 
         # Typing the list of things to do.
         inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertEqual(
             inputbox.get_attribute('placeholder'),
-            'Type thing to do.'
+            'Type thing to do'
         )
 
         # Typing "Buy the peacock feathers" in the text box.
@@ -39,7 +39,8 @@ class NewVisitorTest(unittest.TestCase):
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
         self.assertTrue(
-            any(row.text == '1. Buy the peacock feathers' for row in rows)
+            any(row.text == '1. Buy the peacock feathers' for row in rows),
+            "New element is not in table."
         )
 
         # It's still the text box on the page.
