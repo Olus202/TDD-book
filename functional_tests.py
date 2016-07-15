@@ -18,7 +18,7 @@ class NewVisitorTest(unittest.TestCase):
 
         # "Lists" in title?
         self.assertIn('Lists', self.browser.title)
-        self.fali('End of test!')
+        self.fail('End of test!')
 
         # Typing the list of things to do.
 
