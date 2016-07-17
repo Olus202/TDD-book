@@ -38,20 +38,25 @@ class NewVisitorTest(unittest.TestCase):
 
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(
-            any(row.text == '1. Buy the peacock feathers' for row in rows),
-            "New element is not in table."
-        )
+        self.assertIn('1: Buy the peacock feathers', [row.text for row in rows])
 
         # It's still the text box on the page.
         # Typing "Use the peacock feathers to make a bait" as a second element.
-        self.fail('End of test!')
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Use the peacock feathers to make a bait')
+        inputbox.send_keys(Keys.ENTER)
 
         # The page has been updated again, now it's two elements on the list.
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn('1: Buy the peacock feathers', [row.text for row in rows])
+        self.assertIn(
+            '2: Use the peacock feathers to make a bait', [row.text for row in rows])
 
         # Is it remember on the site? It generated special url with the comment.
+        self.fail('End of test!')
 
-        # Go to the special url - there it a list of things to do.
+        # Go to the special URL - there it a list of things to do.
 
         # End.
 

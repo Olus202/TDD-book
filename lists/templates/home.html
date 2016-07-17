@@ -4,8 +4,12 @@
     </head>
     <body>
         <h1>Your list of things to do</h1>
-        <input id="id_new_item" placeholder="Type thing to do" />
+        <form method='POST'>
+            <input name="item_text" id="id_new_item" placeholder="Type thing to do" />
+            {% csrf_token %}
+        </form>
         <tabel id="id_list_table">
+            <tr><td>1: {{ new_item_text }}</td></tr>
         </tabel>
     </body>
 </html>
