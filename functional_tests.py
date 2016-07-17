@@ -13,6 +13,12 @@ class NewVisitorTest(unittest.TestCase):
         # Quite the browser
         self.browser.quit()
 
+    def check_for_row_in_list_table(self, row_text):
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+
+        self.assertIn(row_text, [row.text for row in rows])
+
     def test_can_start_and_retrieve(self):
         # Running the website of the application
         self.browser.get('http://localhost:8000')
@@ -35,6 +41,7 @@ class NewVisitorTest(unittest.TestCase):
         # After pressing ENTER, the page has been updated.
         # "1. Buy the peacock feathers" as the element of the list.
         inputbox.send_keys(Keys.ENTER)
+        self.check_for_row_in_list_table('1. Buy the peacock feathers')
 
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
@@ -47,11 +54,8 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
 
         # The page has been updated again, now it's two elements on the list.
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('1: Buy the peacock feathers', [row.text for row in rows])
-        self.assertIn(
-            '2: Use the peacock feathers to make a bait', [row.text for row in rows])
+        self.check_for_row_in_list_table('1: Buy the peacock feathers')
+        self.check_for_row_in_list_table('2: Use the peacock feathers to make a bait')
 
         # Is it remember on the site? It generated special url with the comment.
         self.fail('End of test!')
