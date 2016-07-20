@@ -25,12 +25,34 @@ class HomePageTest(TestCase):
 
         response = home_page(request)
 
-        self.assertIn('New element of the list', response.content.decode())
-        expected_html = render_to_string(
-            'home.html',
-            {'new_item_text': 'New element of the list'}
-        )
-        self.assertEqual(response.content.decode(), expected_html)
+        self.assertEqual(Item.objects.count(), 1)
+        new_item = Item.objects.first()
+        self.assertEqual(new_item.text, 'New element of the list')
+
+    def test_home_page_redirect_after_POST(self):
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST['item_text'] = 'New element of the list'
+
+        response = home_page(request)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['location'], '/')
+
+    def test_home_page_only_saves_item_when_necessary(self):
+        request = HttpRequest()
+        home_page(request)
+        self.assertEqual(Item.objects.count(), 0)
+
+    def test_home_page_displays_all_lists_items(self):
+        Item.objects.create(text='itemey 1')
+        Item.objects.create(text='itemey 2')
+
+        request = HttpRequest()
+        response = home_page(request)
+
+        self.assertIn('itemey 1', response.content.decode())
+        self.assertIn('itemey 2', response.content.decode())
 
 class ItemModelTest(TestCase):
 
