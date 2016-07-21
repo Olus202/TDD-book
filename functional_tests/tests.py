@@ -1,8 +1,9 @@
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import unittest
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
 
     def setUp(self):
         # Run the browser
@@ -21,7 +22,7 @@ class NewVisitorTest(unittest.TestCase):
 
     def test_can_start_and_retrieve(self):
         # Running the website of the application
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
 
         # "Lists" in title?
         self.assertIn('Lists', self.browser.title)
@@ -41,7 +42,6 @@ class NewVisitorTest(unittest.TestCase):
         # After pressing ENTER, the page has been updated.
         # "1. Buy the peacock feathers" as the element of the list.
         inputbox.send_keys(Keys.ENTER)
-        self.check_for_row_in_list_table('1. Buy the peacock feathers')
 
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
@@ -64,5 +64,4 @@ class NewVisitorTest(unittest.TestCase):
 
         # End.
 
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')
+#unittest.main(warnings='ignore')
