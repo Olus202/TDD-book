@@ -88,13 +88,9 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertNotEqual(frank_list_url, edith_list_url)
 
         # It's still any element of Edith's list.
-        page_text = self.browser.find_element_by_tag_name('body')
+        page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Buy the peacock feathers', page_text)
         self.assertIn('Buy a milk.', page_text)
-
-
-        ## Control error
-        self.fail('End of test!')
 
         # Go to the special URL - there it a list of things to do.
 
